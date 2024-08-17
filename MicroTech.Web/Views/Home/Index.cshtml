@@ -6,6 +6,8 @@
 
 <div class="text-center">
 <button id="loadAccounts">Load accounts</button>
+
+<!--Table-->
     <table class="table" id="AccountsTable">
         <thead>
             <tr>
@@ -42,15 +44,6 @@
 <script>
     $(document).ready(function () {
         var urlBase = '@MicroTech.Web.Settings.DefualtData.URLBase';
-        // Handle modal close action
-        $('#modalClose').click(function () {
-            // Clear modal content when closed (optional)
-            $("#ModelBody").empty();
-
-            // Hide the modal
-            $('#AccountModal').modal('hide');
-        });
-
         $("#loadAccounts").click(function () {
             $.ajax({
                 url: urlBase + "Accounts/GetAllAccounts", // API endpoint
@@ -79,7 +72,6 @@
                 }
             });
         });
-
         function fetchAccountDetails(accNumber) {
             $.ajax({
                 url: urlBase + "Accounts/GetAccuontDetalies/" + accNumber,
@@ -102,5 +94,12 @@
                 }
             });
         }
+        // Handle modal close action
+        $('#modalClose').click(function () {
+            // Clear modal content when closed (optional)
+            $("#ModelBody").empty();
+            // Hide the modal
+            $('#AccountModal').modal('hide');
+        });
     });
 </script>
