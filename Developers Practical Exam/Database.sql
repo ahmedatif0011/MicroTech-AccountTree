@@ -1,0 +1,143 @@
+USE [master]
+GO
+
+/****** Object:  Database [TestDev]    Script Date: 03/19/2018 14:22:12 ******/
+CREATE DATABASE [TestDev] ON  PRIMARY 
+( NAME = N'DeveloperTest', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\DATA\TestDev.mdf' , SIZE = 3072KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB )
+ LOG ON 
+( NAME = N'DeveloperTest_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\DATA\TestDev_1.ldf' , SIZE = 1024KB , MAXSIZE = 2048GB , FILEGROWTH = 10%)
+GO
+
+ALTER DATABASE [TestDev] SET COMPATIBILITY_LEVEL = 100
+GO
+
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [TestDev].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+
+ALTER DATABASE [TestDev] SET ANSI_NULL_DEFAULT OFF 
+GO
+
+ALTER DATABASE [TestDev] SET ANSI_NULLS OFF 
+GO
+
+ALTER DATABASE [TestDev] SET ANSI_PADDING OFF 
+GO
+
+ALTER DATABASE [TestDev] SET ANSI_WARNINGS OFF 
+GO
+
+ALTER DATABASE [TestDev] SET ARITHABORT OFF 
+GO
+
+ALTER DATABASE [TestDev] SET AUTO_CLOSE OFF 
+GO
+
+ALTER DATABASE [TestDev] SET AUTO_CREATE_STATISTICS ON 
+GO
+
+ALTER DATABASE [TestDev] SET AUTO_SHRINK OFF 
+GO
+
+ALTER DATABASE [TestDev] SET AUTO_UPDATE_STATISTICS ON 
+GO
+
+ALTER DATABASE [TestDev] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+
+ALTER DATABASE [TestDev] SET CURSOR_DEFAULT  GLOBAL 
+GO
+
+ALTER DATABASE [TestDev] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+
+ALTER DATABASE [TestDev] SET NUMERIC_ROUNDABORT OFF 
+GO
+
+ALTER DATABASE [TestDev] SET QUOTED_IDENTIFIER OFF 
+GO
+
+ALTER DATABASE [TestDev] SET RECURSIVE_TRIGGERS OFF 
+GO
+
+ALTER DATABASE [TestDev] SET  DISABLE_BROKER 
+GO
+
+ALTER DATABASE [TestDev] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+
+ALTER DATABASE [TestDev] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+
+ALTER DATABASE [TestDev] SET TRUSTWORTHY OFF 
+GO
+
+ALTER DATABASE [TestDev] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+
+ALTER DATABASE [TestDev] SET PARAMETERIZATION SIMPLE 
+GO
+
+ALTER DATABASE [TestDev] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+
+ALTER DATABASE [TestDev] SET HONOR_BROKER_PRIORITY OFF 
+GO
+
+ALTER DATABASE [TestDev] SET  READ_WRITE 
+GO
+
+ALTER DATABASE [TestDev] SET RECOVERY FULL 
+GO
+
+ALTER DATABASE [TestDev] SET  MULTI_USER 
+GO
+
+ALTER DATABASE [TestDev] SET PAGE_VERIFY CHECKSUM  
+GO
+
+ALTER DATABASE [TestDev] SET DB_CHAINING OFF 
+GO
+
+/****** Object:  Table [dbo].[Accounts]    Script Date: 03/19/2018 14:13:25 ******/
+USE [TestDev]
+GO
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Accounts](
+	[Acc_Number] [nchar](10) NOT NULL,
+	[ACC_Parent] [nchar](10) NULL,
+	[Balance] [decimal](20, 9) NULL,
+ CONSTRAINT [PK_Accounts] PRIMARY KEY CLUSTERED 
+(
+	[Acc_Number] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[Accounts]  WITH CHECK ADD  CONSTRAINT [FK_Accounts_Accounts] FOREIGN KEY([ACC_Parent])
+REFERENCES [dbo].[Accounts] ([Acc_Number])
+GO
+
+ALTER TABLE [dbo].[Accounts] CHECK CONSTRAINT [FK_Accounts_Accounts]
+GO
+Insert Into [dbo].[Accounts] values('01', NULL, NULL)
+Insert Into [dbo].[Accounts] values('02', '01', 100.0)
+Insert Into [dbo].[Accounts] values('03', '01', 0.0)
+Insert Into [dbo].[Accounts] values('04', '03', 100.0)
+Insert Into [dbo].[Accounts] values('05', NULL, NULL)
+Insert Into [dbo].[Accounts] values('06', '05',130.0)
+Insert Into [dbo].[Accounts] values('07', '05', 0.0)
+Insert Into [dbo].[Accounts] values('08', '07', 0.0)
+Insert Into [dbo].[Accounts] values('09', '08', 100.0)
+Insert Into [dbo].[Accounts] values('10', NULL, NULL)
+Insert Into [dbo].[Accounts] values('11', '10', 100.0)
+Insert Into [dbo].[Accounts] values('12', '10', 0.0)
+Insert Into [dbo].[Accounts] values('13', '12', 100.0)

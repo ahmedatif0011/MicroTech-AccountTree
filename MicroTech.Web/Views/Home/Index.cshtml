@@ -1,0 +1,106 @@
+﻿@using MicroTech.Data.Responses
+@model List<TopLevelAccountResponseDTO>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+<button id="loadAccounts">Load accounts</button>
+    <table class="table" id="AccountsTable">
+        <thead>
+            <tr>
+                <th scope="col">Top Level Account</th>
+                <th scope="col">Total Balance</th>
+            </tr>
+        </thead>
+        <tbody id="accountTableRows">
+        </tbody>
+    </table>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="AccountModal" tabindex="-1" role="dialog" aria-labelledby="AccountModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AccountModalLabel">Account Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="ModelBody">
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="modalClose" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var urlBase = '@MicroTech.Web.Settings.DefualtData.URLBase';
+        // Handle modal close action
+        $('#modalClose').click(function () {
+            // Clear modal content when closed (optional)
+            $("#ModelBody").empty();
+
+            // Hide the modal
+            $('#AccountModal').modal('hide');
+        });
+
+        $("#loadAccounts").click(function () {
+            $.ajax({
+                url: urlBase + "Accounts/GetAllAccounts", // API endpoint
+                type: "GET", // HTTP method
+                success: function (data) {
+                    // Clear any existing rows in the table body
+                    $("#AccountsTable tbody").empty();
+
+                    // Loop through the data and append rows to the table
+                    data.forEach(function (Account) {
+                        var row = "<tr data-id='" + Account.acc_Number + "'>" +
+                            "<td>" + Account.acc_Number + "</td>" +
+                            "<td>" + Account.totalBalance + "</td>" +
+                            "</tr>";
+                        $("#AccountsTable tbody").append(row);
+                    });
+
+                    // Bind click event after rows are added
+                    $("#AccountsTable tbody tr").click(function () {
+                        var accNumber = $(this).data("id");
+                        fetchAccountDetails(accNumber);
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error: " + error);
+                }
+            });
+        });
+
+        function fetchAccountDetails(accNumber) {
+            $.ajax({
+                url: urlBase + "Accounts/GetAccuontDetalies/" + accNumber,
+                type: "GET",
+                success: function (data) {
+                    // Clear previous modal content
+                    $("#ModelBody").empty();
+
+                    // Loop through the data and append details to the modal body
+                    data.forEach(function (Account) {
+                        var ele = "<p>" + Account + "</p>";
+                        $("#ModelBody").append(ele);
+                    });
+
+                    // Show the modal
+                    $("#AccountModal").modal("show");
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error: " + error);
+                }
+            });
+        }
+    });
+</script>
